@@ -58,3 +58,31 @@
         name:
           - vector-{{ vector_version }}-1.x86_64.rpm
       notify: Start vector service
+- name: Install Nginx
+  hosts: lighthouse:vector
+  handlers:
+    - name: Start nginx
+      become: true
+      command: nginx
+    - name: Reload nginx
+      become: true
+      command: nginx -s reload
+  tasks:
+    - name: NGINX | Install eper-release
+      become: true
+      ansible.builtin.yum:
+        name: epel-release
+        state: present
+    - name: NGINX | Install Nginx
+      become: true
+      ansible.builtin.yum:
+        name: nginx
+        state: present
+      notify: Start nginx
+    - name: NGINX | Create general config
+      become: true
+      ansible.builtin.template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        mode: 0644
+      notify: Reload nginx

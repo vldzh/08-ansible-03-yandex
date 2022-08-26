@@ -7,3 +7,7 @@ vector:
   hosts:
     vector-01:
       ansible_host: 84.252.139.6
+lighthouse:
+  hosts:
+    lighthouse-01:
+      ansible_host: 84.201.141.166
